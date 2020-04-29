@@ -101,7 +101,7 @@ void draw_country_screen(String sCountry)
   // headline
   tft.setCursor(10, 10);
   tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(3);
+  tft.setTextSize(2); // needed to make font smaller, too many cases in the world
   tft.print(sCountry + ":");
 
   // infected
@@ -172,7 +172,7 @@ void check_country(String sCountry)
         {
           c = http.read();
           s2 = s2 + c;
-          if (readcounter < 255)
+          if (readcounter < 510) // doubled read buffer size from 255 as it was splitting the receoved HTML section before
           {
             readcounter++;
           }
@@ -192,7 +192,10 @@ void check_country(String sCountry)
                 s2 = tempString.substring(place + 15);
                 tempString = s2.substring(s2.indexOf("#aaa") + 6);
                 s1 = tempString.substring(0, (tempString.indexOf("</")));
-                s1.remove(s1.indexOf(","), 1);
+                while (s1.indexOf(",") > 0)
+                {
+                  s1.remove(s1.indexOf(","), 1);
+                }
                 Serial.print("Coronavirus Cases: ");
                 Serial.println(s1);
                 infected = s1.toInt();
@@ -208,7 +211,10 @@ void check_country(String sCountry)
                 s2 = tempString.substring(place + 15);
                 tempString = s2.substring(s2.indexOf("<span>") + 6);
                 s1 = tempString.substring(0, (tempString.indexOf("</")));
-                s1.remove(s1.indexOf(","), 1);
+                while (s1.indexOf(",") > 0)
+                {
+                  s1.remove(s1.indexOf(","), 1);
+                }
                 Serial.print("Deaths: ");
                 Serial.println(s1);
                 deaths = s1.toInt();
@@ -223,7 +229,10 @@ void check_country(String sCountry)
                 s2 = tempString.substring(place + 15);
                 tempString = s2.substring(s2.indexOf("<span>") + 6);
                 s1 = tempString.substring(0, (tempString.indexOf("</")));
-                s1.remove(s1.indexOf(","), 1);
+                while (s1.indexOf(",") > 0)
+                {
+                  s1.remove(s1.indexOf(","), 1);
+                }
                 Serial.print("Recovered: ");
                 Serial.println(s1);
                 recovered = s1.toInt();
